@@ -1,4 +1,5 @@
 class Game {
+  player = null;
   start() {
     // llamar a welcome para el proceso de bienvenida y obtener el arreglo [name, pokemon, pokemonName]
     // crear un Player con la info obtenida (tu pokemon empieza con nivel 3 por defecto). Asignarlo al atributo 'player'
@@ -7,6 +8,27 @@ class Game {
     // Ejecutar train(), challengeLeader() o showStats() segun la opción del usuario
     // Continuar el bucle hasta que el usuario aprete Cancel
     // Llamar a goodbye para la despedida
+
+    const welcome = Game.welcome();
+    this.player = new Player(...welcome);
+    while (true) {
+      const option = Game.menu();
+      if (option === null) {
+        break;
+      }
+      switch (option) {
+        case "1":
+          this.train();
+          break;
+        case "2":
+          this.showStats();
+          break;
+        case "3":
+          this.challengeLeader();
+          break;
+      }
+    }
+    Game.goodbye();
   }
 
   train() {
@@ -17,10 +39,34 @@ class Game {
     // Si, sí quiere pelear
     // Crear una Batalla entre el player y el oponente
     // empezar la batalla con su start
+    const bot = new Bot(typeBot.random);
+    console.log(
+      `%c${this.player.name} challenges ${bot.name} for training`,
+      "font-weight: bold"
+    );
+    console.log(
+      `${bot.name} has a ${bot.pokemon.name} level ${bot.pokemon.level}`
+    );
+    const fight = confirm("Do you want to fight?");
+    if (fight) {
+      new Battle(this.player, bot).start();
+    }
   }
 
   challengeLeader() {
     // mismo mecanismo que train() pero el Bot se llama Brock y usa un Onix nivel 10
+    const bot = new Bot(typeBot.leader);
+    console.log(
+      `%c${this.player.name} challenges ${bot.name} for training`,
+      "font-weight: bold"
+    );
+    console.log(
+      `${bot.name} has a ${bot.pokemon.name} level ${bot.pokemon.level}`
+    );
+    const fight = confirm("Do you want to fight?");
+    if (fight) {
+      new Battle(this.player, bot).start();
+    }
   }
 
   showStats() {
@@ -38,6 +84,14 @@ class Game {
       - specialDefense
       - speed
     */
+    console.table({
+      species: this.player.pokemon.species,
+      level: this.player.pokemon.level,
+      type: this.player.pokemon.type.join(", "),
+      experiencePoints: this.player.pokemon.experiencePoints,
+      stats: "",
+      ...this.player.pokemon.stats
+    });
   }
 
   static welcome() {
@@ -86,10 +140,11 @@ When you feel ready you can challenge BROCK, the PEWTER's GYM LEADER`);
   static menu() {
     // pedir al usuario que elija entre "Train", "Stats", "Leader";
     // retornar una opcion valida
+    return prompt("Choose one option: \n1. Train\n2. Stats\n3. Leader", 1);
   }
 
   static goodbye() {
     console.log("%cThanks for playing Pokemon Yellow", "font-weight: bold");
-    console.log("This game was created with love by: ...");
+    console.log("This game was created with love by: EmersonHoruss");
   }
 }

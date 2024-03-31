@@ -1,6 +1,10 @@
 class Battle {
+  player1 = null;
+  player2 = null;
   constructor(player1, player2) {
     // asigna los jugadores a sus respectivos atributos
+    this.player1 = player1;
+    this.player2 = player2;
   }
 
   start() {
