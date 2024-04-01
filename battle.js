@@ -45,6 +45,8 @@ class Battle {
       console.log("end status of the battle")
       this.printBattleStatus()
     }
+    let winner = null
+    let losser = null
     if(this.player1.pokemon.isFainted()){
       winner = this.player2
       losser = this.player1
@@ -52,6 +54,9 @@ class Battle {
       winner = this.player1
       losser = this.player2
     }
+
+    console.log(`${losser.pokemon.name} FAINTED!`)
+    console.log(`${winner.pokemon.name} WINS!`)
 
     if(winner instanceof Bot){
       console.log(`%c${winner.name} have won the game!`, "font-weight: bold")
